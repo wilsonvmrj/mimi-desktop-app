@@ -27,13 +27,13 @@ class App(ctk.CTk):
         self.entry_name = ctk.CTkEntry(self, placeholder_text="Digite o nome")
         self.entry_name.pack(pady=10)
 
-        self.button_add = ctk.CTkButton(self,text="&Adicionar",command=self.add_person)
+        self.button_add = ctk.CTkButton(self,text="Adicionar",command=self.add_person)
         self.button_add.pack(pady=5)
 
 
         self.search_entry = ctk.CTkEntry(self,placeholder_text="Pesquisar")
         self.search_entry.pack(pady=10)
-        self.search_entry.bind("<keyRekease>",lambda event: self.update_list())
+        self.search_entry.bind("<KeyRelease>",lambda event: self.update_list())
 
         self.listbox = ctk.CTkTextbox(self,height=200)
         self.listbox.pack(pady=10,fill="both", expand=True)
@@ -51,7 +51,7 @@ class App(ctk.CTk):
     def add_person(self):
         name = self.entry_name.get().strip()
         if name:
-            cur.execute("INSERT INTO pessoas (name) (?)",(name,))
+            cur.execute("INSERT INTO pessoas (name) values (?)",(name,))
             conn.commit()
             self.entry_name.delete(0,'end')
             self.update_list()
@@ -66,7 +66,9 @@ class App(ctk.CTk):
                 self.update_list()
     
     def delete_person(self):
-        selected_text = self.listbox.get('self.first', 'sel.last').strip()
+
+        selected_text = self.listbox.get('self.first').strip()
+        print(selected_text)
         if selected_text:
             cur.execute('DELETE FROM pessoas WHERE name = ?',(selected_text,))
             conn.commit()
